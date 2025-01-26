@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Onupoma Team Member Form</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ff007f, #8e44ad, #ffffff);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            transition: all 0.5s ease-in-out;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 8px 30px rgba(255, 0, 127, 0.4);
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: #ff007f;
+            font-weight: 600;
+            margin-bottom: 15px;
+            animation: glowText 1.5s infinite alternate;
+        }
+
+        @keyframes glowText {
+            from { text-shadow: 0 0 10px rgba(255, 0, 127, 0.5); }
+            to { text-shadow: 0 0 20px rgba(255, 0, 127, 0.8); }
+        }
+
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid #ff007f;
+            background: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin: auto;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-pic:hover {
+            transform: scale(1.05);
+        }
+
+        .profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            font-size: 16px;
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, textarea:focus {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #ff007f;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background 0.3s ease, transform 0.2s;
+        }
+
+        button:hover {
+            background: #d6006c;
+            transform: scale(1.05);
+        }
+
+        .dashboard {
+            display: none;
+            padding: 20px;
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .dashboard img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid #ff007f;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container" id="formContainer">
+        <h2>Onupoma Team Member Form</h2>
+        <div class="profile-pic" id="profilePicContainer">
+            <img id="profilePreview" src="" alt="">
+        </div>
+        <input type="file" id="profilePic" accept="image/*" style="display: none;">
+        <input type="text" id="name" placeholder="Full Name" required>
+        <input type="text" id="college" placeholder="College Name" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="tel" id="phone" placeholder="Phone Number" required>
+        <input type="text" id="skills" placeholder="Skills (if any)">
+        <input type="text" id="experience" placeholder="Experience (if any)">
+        <textarea id="notes" placeholder="Additional Notes (Optional)"></textarea>
+        <button type="button" onclick="sendData()">Submit</button>
+    </div>
+
+    <div class="container dashboard" id="dashboard">
+        <h2>Submission Overview</h2>
+        <img id="dashboardProfile" src="" alt="">
+        <h3 id="dashboardName"></h3>
+        <p><strong>College:</strong> <span id="dashboardCollege"></span></p>
+        <p><strong>Email:</strong> <span id="dashboardEmail"></span></p>
+        <p><strong>Phone:</strong> <span id="dashboardPhone"></span></p>
+        <p><strong>Skills:</strong> <span id="dashboardSkills"></span></p>
+        <p><strong>Experience:</strong> <span id="dashboardExperience"></span></p>
+        <p><strong>Notes:</strong> <span id="dashboardNotes"></span></p>
+    </div>
+
+    <script>
+        document.getElementById("profilePicContainer").addEventListener("click", function() {
+            document.getElementById("profilePic").click();
+        });
+
+        document.getElementById("profilePic").addEventListener("change", function(event) {
+            let reader = new FileReader();
+            reader.onload = function() {
+                document.getElementById("profilePreview").src = reader.result;
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        });
+
+        async function sendData() {
+            let name = document.getElementById("name").value;
+            let college = document.getElementById("college").value;
+            let email = document.getElementById("email").value;
+            let phone = document.getElementById("phone").value;
+            let skills = document.getElementById("skills").value || "Not provided";
+            let experience = document.getElementById("experience").value || "Not provided";
+            let notes = document.getElementById("notes").value || "No additional notes.";
+            let profilePic = document.getElementById("profilePic").files[0];
+
+            if (!name || !college || !email || !phone) {
+                alert("Please fill all required fields!");
+                return;
+            }
+
+            let formData = new FormData();
+            formData.append("chat_id", "7071872572");
+            formData.append("photo", profilePic);
+            formData.append("caption", `👤 Name: ${name}\n🏫 College: ${college}\n📧 Email: ${email}\n📞 Phone: ${phone}\n💡 Skills: ${skills}\n🎖 Experience: ${experience}\n📝 Notes: ${notes}`);
+
+            await fetch(`https://api.telegram.org/bot7871098929:AAFmI5XJSFwcG3n_HZfzkMGHgvJL118eK-M/sendPhoto`, {
+                method: "POST",
+                body: formData
+            });
+
+            // Populate dashboard with submitted data
+            document.getElementById("dashboardProfile").src = URL.createObjectURL(profilePic);
+            document.getElementById("dashboardName").textContent = name;
+            document.getElementById("dashboardCollege").textContent = college;
+            document.getElementById("dashboardEmail").textContent = email;
+            document.getElementById("dashboardPhone").textContent = phone;
+            document.getElementById("dashboardSkills").textContent = skills;
+            document.getElementById("dashboardExperience").textContent = experience;
+            document.getElementById("dashboardNotes").textContent = notes;
+
+            document.getElementById("formContainer").style.display = "none";
+            document.getElementById("dashboard").style.display = "block";
+        }
+    </script>
+
+</body>
+</html>
